@@ -53,7 +53,7 @@ Excentricity <- function (trw.series, complete=FALSE)
 ### Used arguments of this function are stored TRW (data.frame name), plot and tree ID (number)
 ###########################################
 
-#doplnit o funkci pøipravující data (kdyby mìl uživatel pouze 2 na sebe kolmé vývrty??)
+#doplnit o funkci pÃ¸ipravujÃ­cÃ­ data (kdyby mÃ¬l uÅ¾ivatel pouze 2 na sebe kolmÃ© vÃ½vrty??)
 BAIcalculation<-function(trw.series){
   IDs<-.IDdistinct(trw.series)
   result<-data.frame(cambAge=c(1:length(rownames(trw.series))))
@@ -276,7 +276,7 @@ RMR <- function (trw.series, meta, mr.estimate, nyrs=5, nsph=4) {
       len<-c(len,length(na.omit(trw.series[,i])))
     }
     mr.estimate$Length<-len
-    #sem se musí dodat info o pith presence
+    #sem se musÃ­ dodat info o pith presence
     for(i in 1:length(n)){
       ind<-which(n[i]==mr.estimate$IDCore)
       miss<-mr.estimate$MissingRings[ind]
@@ -397,9 +397,9 @@ apical <- function (trw.series, meta, mr.estimate) {
     subs <- subset(n.ring, subset=(Series==ser.s|Series==ser.j|Series==ser.v|Series==ser.z)) # subset of estimated number of tree-rings for cores from the same level 
     pith <- subset(subs, subset=MissingRing==0) # subset of number of tree-rings from cores from the same level, which hit the pit
     ### If at least one core goes through the pit, then it is used. Othervise, we use mean of estimated number of rings based on all available cores.
-    if (nrow(pith)>0) {ring.estimate <- sum(pith[,"TotalRing"])/nrow(pith);
+    if (nrow(pith)>0) {ring.estimate <- median(pith[,"TotalRing"]);
     n.ring.elev[k,"Pith"] <- "Yes"} 
-    if (nrow(pith)==0) {ring.estimate <- sum(subs[,"TotalRing"])/nrow(subs);
+    if (nrow(pith)==0) {ring.estimate <- median(subs[,"TotalRing"]);
     n.ring.elev[k,"Pith"] <- "No"} 
     
     n.ring.elev[k,"TotalRing"] <- round(ring.estimate, 0) 
