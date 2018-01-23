@@ -373,7 +373,7 @@ RMR <- function (trw.series, meta, mr.estimate, nyrs=5, nsph=4) {
 apical <- function (trw.series, meta, mr.estimate) {
   j <- 1
   n.ring <- data.frame(ObservedRing=NA, MissingRing=NA, TotalRing=NA, Series=NA)
-  n.ring.elev <- data.frame(TotalRing=NA, IDPlot=NA, IDTree=NA, IDLevel=NA, Pith=NA)
+  n.ring.elev <- data.frame(TotalRing=NA, IDPlot=NA, IDTree=NA, IDLevel=NA, Pith=NA, Height.cm=NA)
   ID <- .IDdistinct(trw.series)
   
   for (i in (1:ncol(trw.series))){
@@ -405,6 +405,8 @@ apical <- function (trw.series, meta, mr.estimate) {
     n.ring.elev[k,"TotalRing"] <- round(ring.estimate, 0) 
     n.ring.elev[k,c("IDPlot", "IDTree", "IDLevel")] <- ((ID$IDAspect)[k,c("IDPlot", "IDTree", "IDLevel")])
     
+    meta.subs <- subset(meta, subset=(meta[,1]==n.ring.elev[k,"IDPlots"] & meta[,2]==n.ring.elev[k,"IDTree"] & meta[,3]==n.ring.elev[k,"IDLevel"])
+    if (nrow(meta.subs)==1) {n.ring.elev[k,"Height.cm"] <- meta.subs[1,4]}
     
   }
   
