@@ -5,24 +5,25 @@ library("Rcmdr")
 library("xlsx")
 
 #trw <- read.rwl("Last.rwl", format="auto") # Test data - GAUK: Apical growth in Praded
-trw <- read.rwl("#Serie_CrossD.rwl", format="auto") # Test data - GAUK: Apical growth in Praded
+trw <- read.rwl("C:/honzaT/SKOLA/Rbalik/#IncrementR_2.3/#Serie_CrossD.rwl", format="auto") # Test data - GAUK: Apical growth in Praded
 #meta <- readXL("Last.xlsx", rownames=FALSE, header=TRUE, na="", sheet="odbery",stringsAsFactors=TRUE)
-meta <- readXL("Last.xlsx", rownames=FALSE, header=TRUE, na="",sheet="odbery")
-po <- readXL("Last.xlsx", rownames=FALSE, header=TRUE, na="", sheet="p.offset",stringsAsFactors=FALSE)
+meta <- readXL("C:/honzaT/SKOLA/Rbalik/#IncrementR_2.3/Last.xlsx", rownames=FALSE, header=TRUE, na="",sheet="odbery")
+po <- readXL("C:/honzaT/SKOLA/Rbalik/#IncrementR_2.3/Last.xlsx", rownames=FALSE, header=TRUE, na="", sheet="p.offset",stringsAsFactors=FALSE)
 
-#vysky<-c(97,145,237,293,340,380,531,550,600) #pouze pomocné výšky
+#vysky<-c(97,145,237,293,340,380,531,550,600) #pouze pomocnÃ© vÃ½Å¡ky
 
 #Calculations
 exc <- Excentricity(trw.series=trw) # OK
 miss.ring <- EMR(trw, 5, po, method="Both") # OK
-replacedFile<-replaceMissingRings(trw.series=trw, meta=meta, mr.estimate=miss.ring,no.rings=5,no.series.per.height=4) #OK
+replacedFile<-RMR(trw.series=trw, meta=meta, mr.estimate=miss.ring) #OK
 apical.series <- apical(trw.series=trw, meta=meta, mr.estimate=miss.ring) # OK
 rF<-replacedFile[,1:56]
 
 #taperFile<-taperCalcul(replacedFile,meta) ###!!!### CHYBA - Error in res$taper[i] <- oElipse/treeHeight : replacement has length zero
 taperFile<-taperCalcul(rF,meta) # OK 
-#baiComplete<-BAIcalculation(replacedFile) # OK, ale výpoèetnì nároèné
+#baiComplete<-BAIcalculation(replacedFile) # OK, ale vÃ½poÄetnÄ› nÃ¡roÄnÃ©
 baiComplete<-BAIcalculation(rF) #OK
+
 
 #Graphic functions
 drawExcentricityGraph(plot=8,tree=2,heights=meta, trw=rF, exc=excentricity, withAlometry=T, method="Schweingruber") ###OK
