@@ -53,7 +53,7 @@ Excentricity <- function (trw.series, complete=FALSE)
 ### Used arguments of this function are stored TRW (data.frame name), plot and tree ID (number)
 ###########################################
 
-#doplnit o funkci pøipravující data (kdyby mìl uživatel pouze 2 na sebe kolmé vývrty??)
+#doplnit o funkci poipravující data (kdyby mil uživatel pouze 2 na sebe kolmé vývrty??)
 BAIcalculation<-function(trw.series){
   IDs<-.IDdistinct(trw.series)
   result<-data.frame(cambAge=c(1:length(rownames(trw.series))))
@@ -373,7 +373,7 @@ RMR <- function (trw.series, meta, mr.estimate, nyrs=5, nsph=4) {
 apical <- function (trw.series, meta, mr.estimate) {
   j <- 1
   n.ring <- data.frame(ObservedRing=NA, MissingRing=NA, TotalRing=NA, Series=NA)
-  n.ring.elev <- data.frame(TotalRing=NA, IDPlot=NA, IDTree=NA, IDLevel=NA, Pith=NA, Height.cm=NA)
+  n.ring.elev <- data.frame(TotalRing=NA, IDPlot=NA, IDTree=NA, IDLevel=NA, Pith=NA, Height.cm=NA, Speed.cmyr=NA, MeanSpeedError.cmyr=NA)
   ID <- .IDdistinct(trw.series)
   
   for (i in (1:ncol(trw.series))){
@@ -384,7 +384,7 @@ apical <- function (trw.series, meta, mr.estimate) {
     n.ring[j,1] <- nrow(df.trw) # number of measured rings
     if (nrow(miss.ring)==1) {n.ring[j,2] <- miss.ring[1,1]} # number of missing rings
     if (!is.na(miss.ring[1,1])) {n.ring[j,3] <- n.ring[j,2] + n.ring[j,1]} else {n.ring[j,3] <- n.ring[j,1]}  # total number of rings (measured+missing)
-    n.ring[j,4] <- as.character(data.frame(colnames(trw))[i,]) # name of series
+    n.ring[j,4] <- as.character(data.frame(colnames(trw.series))[i,]) # name of series
     j <- j+1
   }
   
@@ -405,13 +405,26 @@ apical <- function (trw.series, meta, mr.estimate) {
     n.ring.elev[k,"TotalRing"] <- round(ring.estimate, 0) 
     n.ring.elev[k,c("IDPlot", "IDTree", "IDLevel")] <- ((ID$IDAspect)[k,c("IDPlot", "IDTree", "IDLevel")])
     
-    meta.subs <- subset(meta, subset=(meta[,1]==n.ring.elev[k,"IDPlots"] & meta[,2]==n.ring.elev[k,"IDTree"] & meta[,3]==n.ring.elev[k,"IDLevel"])
+    meta.subs <- subset(meta, subset=(meta[,1]==n.ring.elev[k,"IDPlot"] & meta[,2]==n.ring.elev[k,"IDTree"] & meta[,3]==n.ring.elev[k,"IDLevel"]))
+
     if (nrow(meta.subs)==1) {n.ring.elev[k,"Height.cm"] <- meta.subs[1,4]}
+
+    }
+
+    n.ring.elev <- n.ring.elev[order(n.ring.elev$IDPlot, n.ring.elev$IDTree, n.ring.elev$IDLevel),] # Sorting of "Level" table
+
+  for (l in (2:nrow(n.ring.elev))) {
+    if ( n.ring.elev[l,"IDPlot"]==n.ring.elev[(l-1),"IDPlot"] & n.ring.elev[l,"IDTree"]==n.ring.elev[(l-1),"IDTree"] ) {
+	
+	n.ring.elev[l,"Speed.cmyr"] <- (n.ring.elev[l,"Height.cm"]-n.ring.elev[(l-1),"Height.cm"]) / (n.ring.elev[(l-1),"TotalRing"]-n.ring.elev[l,"TotalRing"])
+	n.ring.elev[l,"MeanSpeedError.cmyr"] <- n.ring.elev[l,"Speed.cmyr"] - (n.ring.elev[l,"Height.cm"]-n.ring.elev[(l-1),"Height.cm"]) / (n.ring.elev[(l-1),"TotalRing"]-n.ring.elev[l,"TotalRing"] + 1)
+
+	}
     
-  }
-  
-  lst <- list(N.ring_Core=n.ring, N.ring_Level=n.ring.elev)
+    
+    }
+
+    lst <- list(N.ring_Core=n.ring, N.ring_Level=n.ring.elev)
   return(lst)
 }
-
 
