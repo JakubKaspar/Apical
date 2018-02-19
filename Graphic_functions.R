@@ -132,3 +132,48 @@ drawTaper<-function(taperFile,plot=1,tree=1,variant="Taper"){
   return(p)
 }
 
+######################
+### Function drawing graph of apical growth
+###	
+### 
+######################
+
+drawApicalData<-function(plot=1,tree=1,apicalData){
+  dta<-subset(apicalData$N.ring_Level, IDPlot==plot & IDTree==tree)
+  dots<-data.frame(where=rep(0,(dta$TotalRing[1]-dta$TotalRing[length(dta$TotalRing)]+1)),
+                   howmany=seq(dta$TotalRing[1],dta$TotalRing[length(dta$TotalRing)],-1))
+  
+  d<-NULL
+  for(i in 2:length(dta$TotalRing)){
+    j<-i-1
+    
+    d1<-seq(from=dta$Height.cm[j],to=(dta$Height.cm[i]-dta$Speed.cmyr[i]),by=dta$Speed.cmyr[i])
+    #d<-seq(from=df,to=t,by=b)
+    d<-c(d,d1)
+  }
+  
+  d<-c(d,dta$Height.cm[length(dta$TotalRing)])
+  d<-round(d,1)
+  dots$where<-d
+  
+  koef<-floor(max(dots$howmany)*0.1+1)*10
+  maxError<-floor(((max(dta$Speed.cmyr,na.rm=T)+max(dta$MeanSpeedError.cmyr,na.rm=T))/10)+1)*10
+  maxX<-floor(max(dta$Height.cm)*0.01+1)*100
+  
+  
+  g1<-ggplot(data=dots,aes(x=howmany,y=where))+geom_area()
+  g1<-g1 + scale_x_continuous(limits = c(0,koef), breaks=seq(0,koef,(koef/5)), labels=seq(0,koef,(koef/5)),"Number of tree rings")
+  g1<-g1 + scale_y_continuous(limits = c(0,maxX), breaks=c(0,dta$Height.cm), labels=c(0,dta$Height.cm),"Stem height (cm)")
+  g1<-g1 + theme_classic()
+  g1
+  
+  
+  g2<-ggplot(data=dta,aes((Speed.cmyr),Height.cm))+ geom_point(size=3) + geom_errorbarh(aes(xmin=(Speed.cmyr)-MeanSpeedError.cmyr, xmax=(Speed.cmyr)+MeanSpeedError.cmyr), size=1.25, height=0)
+  g2<-g2 + scale_x_continuous(limits = c(0,maxError), breaks=seq(0,maxError,(maxError/5)), labels=seq(0,maxError,(maxError/5)),"Height growth (cm)")
+  g2<-g2 + scale_y_continuous(limits = c(0,maxX), breaks=c(0,dta$Height.cm), labels=c(0,dta$Height.cm),"Stem height (cm)",position = "right")
+  g2<-g2 + theme_classic()
+  g2
+  
+  
+  plot_grid(g1, g2, ncol = 2, nrow = 1)
+}
