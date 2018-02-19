@@ -34,4 +34,4 @@ drawBai(baiComplete,plot=8,tree=2,T,T) #OK
 
 drawTaper(taperFile,plot=8,tree=2,variant="Angle") #OK
 
-
+drawApicalData(plot=1,tree=1,apicalData=apical.series) #OK
