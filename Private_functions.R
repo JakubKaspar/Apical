@@ -172,7 +172,7 @@
   return(w)
 }# returns TRW for selected tree without NA values
 
-#Zkontrolovat, jak moc jsou tyto funkce univerz·lnÌ!!!!
+#Zkontrolovat, jak moc jsou tyto funkce univerz√°ln√≠!!!!
 .seriesLength<-function(serie){
   lengths<-c()
   for(i in 1:(length(serie))){
@@ -267,7 +267,7 @@
   
   vystup<-rbind(q1,q2,q4,q3)
   return(vystup)
-}# v˝poËet parametr˘ elipsy - jednotlivÈ body
+}# v√Ωpoƒçet parametr≈Ø elipsy - jednotliv√© body
 
 ######################
 ### Set of private functions for creating graph of stem allometry
@@ -300,7 +300,7 @@
                     #trwAvg=trwa
   )
   return(curve)
-}#vr·tÌ data.frame s parametry pro vykreslenÌ alometrickÈho grafu
+}#vr√°t√≠ data.frame s parametry pro vykreslen√≠ alometrick√©ho grafu
 .dataGraphAlometry<-function(trw,vysky,plot=1,tree=1,dir="N-S"){
   if(dir=="N-S"){
     a<-1
@@ -343,7 +343,7 @@
   }
   sirky[length(vysky)]<-0
   return(data.frame(height=vysky,width=sirky)) 
-} #VypoËte vzd·lenost od osy y, pro z·pad a jih (lev· c·st grafu) se musÌ vyn·sobit -1
+} #Vypoƒçte vzd√°lenost od osy y, pro z√°pad a jih (lev√° c√°st grafu) se mus√≠ vyn√°sobit -1
 .dataLine<-function(exct,meta){
   values<-data.frame(exct[,as.character(meta[1])])
   for(i in 2:length(meta)){
@@ -351,7 +351,7 @@
   }
   colnames(values)<-meta
   return(values)
-} #ZÌsk· data pro excentricitu
+} #Z√≠sk√° data pro excentricitu
 .widths<-function(trw,left,right,heights){
   widthsLeft<-.widthGraphExcentricity(trw,left,heights)
   widthsRight<-.widthGraphExcentricity(trw,right,heights)
@@ -367,14 +367,14 @@
   linie$roky<-(linie$roky-1)
   linie$hodnoty<-linie$hodnoty+(vyska-(max(linie$hodnoty)-min(linie$hodnoty))/2)
   return(linie)
-} #pro kombinovan˝ graf vypoËte vzd·lenosti na ose X a Y pro pravou stranu
+} #pro kombinovan√Ω graf vypoƒçte vzd√°lenosti na ose X a Y pro pravou stranu
 .calcSerieLeft<-function(serie,vyska){
   serie<-na.omit(serie)
   linie<-data.frame(roky=c(1:length(serie)),hodnoty=serie*10)
   linie$roky<-(linie$roky-1)*-1
   linie$hodnoty<-linie$hodnoty+(vyska-(max(linie$hodnoty)-min(linie$hodnoty))/2)
   return(linie)
-} #pro kombinovan˝ graf vypoËte vzd·lenosti na ose X a Y pro levou stranu
+} #pro kombinovan√Ω graf vypoƒçte vzd√°lenosti na ose X a Y pro levou stranu
 
 #set of drawing functions
 .linie<-function(graf, vyska, dataLeft, dataRight){
@@ -383,7 +383,7 @@
   graf<-graf+geom_line(data=line1, aes_string(line1$roky, line1$hodnoty), size=1, colour="#CC0000")
   graf<-graf+geom_line(data=line2, aes_string(line2$roky, line2$hodnoty), size=1, colour="#CC0000")
   return(graf)
-} #vykreslÌ jednu linii dle parametr˘
+} #vykresl√≠ jednu linii dle parametr≈Ø
 
 .plotGraph<-function(plot,tree,heights,trw,exc,withAlometry=T,direction="North-South",rangeX){
   left<-0
@@ -395,7 +395,7 @@
   serieLeft<-.dataLine(exc,left) #extc
   serieRight<-.dataLine(exc,right)
   val<-.widths(trw,left,right,heights)
-  print(val)
+  #print(val)
   if(withAlometry==T){
     graph<-ggplot(val, aes(width, height)) + geom_point(size = 4, color="#CC0000")+ geom_path(size=1,color="#000099")
     graph<-graph+theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.line = element_line(colour = "black"))
