@@ -138,14 +138,11 @@ taperCalcul<-function(trw.series,meta){
     }else{
       oElipse2<-0
     }
-    
-    
-    #print(subMeta)
-    #print(c(sb,i,j,treeHeight1,treeHeight2,oElipse1,oElipse2))
+    rElipse1<-oElipse1/pi
+    rElipse2<-oElipse2/pi
     res$level.height[i]<-treeHeight1
-    res$taper[i]<-(oElipse1-oElipse2)/treeHeight
-    res$taper.angle[i]<-(atan(0.5*res$taper[i])* 180) / (pi)
-    #print(res[i,])
+    res$taper[i]<-((rElipse1-rElipse2)/(treeHeight*10))
+    res$taper.angle[i]<-atan(0.5*res$taper[i])*(180/pi)
   }
   
   return(res)
